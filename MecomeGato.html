@@ -1,47 +1,66 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <!-- Physics system script -->
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
   </head>
   <body>
-    <a-scene>
-      <!-- ASSETS: Must be inside the scene to pre-load and prevent lag [1] -->
+    <!-- The scene-level physics component activates gravity and collision logic -->
+    <a-scene physics="gravity: -9.8; debug: false; iterations: 10">
+      
       <a-assets>
         <img id="ornate_pattern" src="ornate_pattern.jpg">
+        <img id="floor_tiles" src="Floortiles.jpeg">
       </a-assets>
-      <a-sky src="#ornate_pattern" 
-                position="0 3 0" 
-               rotation="0 -130 0" material geometry scale 
-               repeat="10 10"></a-sky>
 
-      <!-- CEILING: Tiling the ornate pattern is best for interiors [3] -->
-      <a-plane src="#ornate_pattern" 
-               position="0 3 0" 
-               rotation="90 0 0" 
-               width="30" height="30" 
-               repeat="10 10">
-      </a-plane>
+      <!-- THE ENCLOSURE: Walls placed 15m from center to enclose the 30m floor -->
+      <!-- 'static-body' ensures these are physical obstacles -->
+     <a-sky src="#ornate_pattern"
+          position="0 130y 0" 
+         rotation="90 0 0" 
+         width="1000" height="1000" 
+         repeat="200 200"
 
-      <!-- GROUND: Rotated -90 on X-axis to be horizontal [2] -->
-      <a-plane position="0 0 0" 
-               rotation="-90 0 0" 
-               width="30" height="30"
-               repeat="10 10" 
-               color="#fff192">
-      </a-plane>
+      <!-- THE CEILING: Visual only (3m high) -->
+      <!-- Endless Ornate Ceiling -->
+<a-plane src="#ornate_pattern" 
+         position="0 3 0" 
+         rotation="90 0 0" 
+         width="1000" height="1000" 
+         repeat="200 200">
+</a-plane>
 
-      <!-- CAMERA: Set at 0.2m high to establish the "Cat Perspective" [4] -->
-        <!-- THE CAMERA: Cat perspective at 0.2m height -->
-      <a-camera position="0 0.2 0">
-        <!-- BLINKING EFFECT: A black sphere that fades out -->
+      <!-- THE SOLID FLOOR: Consolidated into one plane to prevent falling through the world -->
+      <!-- Endless Tiled Floor -->
+<a-plane src="#floor_tiles" 
+         rotation="-90 0 0" 
+         width="1000" height="1000" 
+         repeat="500 500"
+         static-body>
+</a-plane>
+
+      <!-- CONSOLIDATED CAMERA: One camera to handle movement, blink, and physics -->
+      <!-- 'kinematic-body' gives the cat a physical shell that cannot pass through walls -->
+      <a-camera position="0 0.2 0" wasd-controls="acceleration: 15" kinematic-body>
+        <!-- BLINKING EFFECT: Black sphere that fades out -->
         <a-sphere id="blink"
                   radius="0.1"
                   color="black"
                   material="opacity: 1; transparent: true; side: double"
                   animation="property: material.opacity; from: 1; to: 0; dur: 3000; easing: easeInQuad; delay: 1000">
         </a-sphere>
+        <!-- Cursor for interaction -->
         <a-cursor color="#FFC0CB"></a-cursor>
       </a-camera>
-      
+
+      <!-- SOFA GROUP: 'static-body' on all parts makes the sofa solid -->
+      <a-entity id="arabic_sofa" position="0 0 -4">
+        <a-box id="seat" position="0 0.2 -0.5" width="3" height="0.4" depth="1" color="#8B8B2B" static-body></a-box>
+        <a-box id="backrest" position="0 0.75 -1.05" width="3" height="0.7" depth="0.1" color="#7A7A25" static-body></a-box>
+        <a-box id="l-seat" position="1.9 0.2 0.2" width="0.8" height="0.4" depth="2.4" color="#8B8B2B" static-body></a-box>
+        <a-box id="l-back" position="2.35 0.75 0.2" width="0.1" height="0.7" depth="2.4" color="#7A7A25" static-body></a-box>
+      </a-entity>
+
     </a-scene>
   </body>
 </html>
