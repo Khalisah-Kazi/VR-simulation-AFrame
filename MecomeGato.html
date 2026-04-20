@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <!-- ASSETS: Must be inside the scene to pre-load and prevent lag [1] -->
+      <a-assets>
+        <img id="ornate_pattern" src="ornate_pattern.jpg">
+      </a-assets>
+      <a-sky src="#ornate_pattern" 
+                position="0 3 0" 
+               rotation="0 -130 0" material geometry scale 
+               repeat="10 10"></a-sky>
+
+      <!-- CEILING: Tiling the ornate pattern is best for interiors [3] -->
+      <a-plane src="#ornate_pattern" 
+               position="0 3 0" 
+               rotation="90 0 0" 
+               width="30" height="30" 
+               repeat="10 10">
+      </a-plane>
+
+      <!-- GROUND: Rotated -90 on X-axis to be horizontal [2] -->
+      <a-plane position="0 0 0" 
+               rotation="-90 0 0" 
+               width="30" height="30"
+               repeat="10 10" 
+               color="#fff192">
+      </a-plane>
+
+      <!-- CAMERA: Set at 0.2m high to establish the "Cat Perspective" [4] -->
+        <!-- THE CAMERA: Cat perspective at 0.2m height -->
+      <a-camera position="0 0.2 0">
+        <!-- BLINKING EFFECT: A black sphere that fades out -->
+        <a-sphere id="blink"
+                  radius="0.1"
+                  color="black"
+                  material="opacity: 1; transparent: true; side: double"
+                  animation="property: material.opacity; from: 1; to: 0; dur: 3000; easing: easeInQuad; delay: 1000">
+        </a-sphere>
+        <a-cursor color="#FFC0CB"></a-cursor>
+      </a-camera>
+      
+    </a-scene>
+  </body>
+</html>
